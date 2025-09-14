@@ -1,0 +1,44 @@
+{
+    "compilerOptions": {
+        "lib": ["ES2020"],
+        "target": "ES2020",
+        "module": "commonjs",
+        "moduleResolution": "node",
+
+        "resolveJsonModule": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+
+        "outDir": "dist",
+        "baseUrl": "src",
+        "paths": {
+            "@common/*": ["common/*"],
+            "@common": ["common/index"],
+            "@modules/*": ["modules/*"],
+            "@modules/Shared": ["modules/Shared/index"],
+            "@modules/Shared/*": ["modules/Shared/*"],
+            "@modules": ["modules/index"],
+            "@infrastructure/*": ["infrastructure/*"],
+            "@infrastructure": ["infrastructure/index"]
+        },
+
+        "esModuleInterop": true,
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "useUnknownInCatchVariables": false,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+
+        "types": ["node", "jest"],
+        "typeRoots": ["./node_modules/@types"],
+        "inlineSourceMap": true,
+        "inlineSources": true,
+        "removeComments": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "dist"]
+}

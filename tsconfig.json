@@ -39,6 +39,6 @@
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*", "src/modules/Auth/interfaces/.ts"],
     "exclude": ["node_modules", "dist"]
 }

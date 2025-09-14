@@ -11,7 +11,7 @@ export default class AuthRouter {
         console.log('request', req.data);
         const useCase = GLOBAL_CONTAINER.get<LoginUserUseCase>(TYPESDEPENDENCIES.LoginUserUseCase);
         const data = validateData<IRegisterUser>(authParamsSchema, req.data);
-        const resultado = await useCase.execute(data);
-        return Result.ok({ message: resultado });
+        const result = await useCase.execute(data);
+        return Result.ok({ message: result });
     }
 }

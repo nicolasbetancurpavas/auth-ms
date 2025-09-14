@@ -1,9 +1,14 @@
+export type UserRole = 'user' | 'admin';
 export type UserVM = {
     id: number;
     nombre: string;
     email: string;
-    rol: 'user' | 'admin';
+    rol: UserRole;
 };
+
+export interface UserAuth extends UserVM {
+    passwordHash: string;
+}
 
 export type HeadersChpsInterface = IHeaderChpsV1 | IHeaderChpsV2 | IHeaderChpsV3;
 export interface IHeaderChpsV1 {

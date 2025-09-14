@@ -15,7 +15,7 @@ export default class Modules implements IModule {
     getRutas = (): Ruta[] => {
         return [
             {
-                metodo: HTTPMETODO.GET,
+                metodo: HTTPMETODO.POST,
                 url: '/register',
                 evento: TenancyRouter.prototype.register,
             },

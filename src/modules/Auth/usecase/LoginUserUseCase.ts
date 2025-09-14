@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import TYPESDEPENDENCIES from '../dependencies/TypesDependencies';
 import { IRegisterUser } from '../interfaces/IRegisterUser';
 import { UserVM } from '../domain/entities/DataInterface';
-import { UserRepository } from '../domain/repositories/TenancyRepository';
+import { UserRepository } from '../domain/repositories/UserRepository';
 import { PasswordHasher } from '../domain/services/AuthDomainServices';
 
 @injectable()

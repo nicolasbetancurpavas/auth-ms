@@ -1,5 +1,11 @@
-import { UserVM } from '../entities/DataInterface';
+import { UserRole, UserVM } from '../entities/DataInterface';
 
+export interface CreateUserInput {
+    nombre: string;
+    email: string;
+    passwordHash: string;
+    rol: UserRole;
+}
 export interface UserRepository {
     findByEmail(email: string): Promise<(UserVM & { passwordHash: string }) | null>;
     create(input: { nombre: string; email: string; passwordHash: string; rol: 'user' | 'admin' }): Promise<UserVM>;

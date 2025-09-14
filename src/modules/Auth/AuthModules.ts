@@ -20,14 +20,14 @@ export default class Modules implements IModule {
                 evento: TenancyRouter.prototype.register,
             },
             {
-                metodo: HTTPMETODO.GET,
+                metodo: HTTPMETODO.POST,
                 url: '/login',
-                evento: TenancyRouter.prototype.register,
+                evento: TenancyRouter.prototype.login,
             },
             {
                 metodo: HTTPMETODO.GET,
                 url: '/validate',
-                evento: TenancyRouter.prototype.register,
+                evento: TenancyRouter.prototype.validate,
             },
         ];
     };

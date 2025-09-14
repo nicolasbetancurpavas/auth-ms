@@ -6,7 +6,7 @@ export interface PasswordHasher {
 }
 
 export interface TokenService {
-    sign(payload: object, opts?: { expiresIn?: string | number }): string;
+    sign(payload: object, opts?: { expiresIn?: string }): string;
     verify<T = any>(token: string): T;
 }
 

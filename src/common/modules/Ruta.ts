@@ -1,12 +1,13 @@
 export interface Ruta {
-    metodo: HTTPMETODOTYPE;
+    metodo: HTTPMETODO; // usa el enum directamente
     url: string;
-    evento: CallableFunction;
-    handler?: Record<string, any>;
-    schema?: Record<string, any>;
+    evento: (...args: any[]) => Promise<any> | any; // handler de la ruta
+    handler?: Record<string, unknown>;
+    schema?: Record<string, unknown>;
 }
 
-type HTTPMETODOTYPE = 'get' | 'post' | 'put' | 'delete' | 'patch';
+// Derivado del enum para mantener consistencia si agregas métodos
+export type HTTPMETODOTYPE = `${HTTPMETODO}`;
 
 export enum HTTPMETODO {
     GET = 'get',
@@ -14,13 +15,29 @@ export enum HTTPMETODO {
     PUT = 'put',
     DELETE = 'delete',
     PATCH = 'patch',
+    OPTIONS = 'options',
+    HEAD = 'head',
 }
+
 export enum HTTPSTATUSCODE {
+    // 2xx
     OK = 200,
-    INTERNAL = 200,
-    UNPROCESSABLE_CONTENT = 422,
     CREATED = 201,
-    RECEIVED = 202,
+    ACCEPTED = 202,
     NO_CONTENT = 204,
+
+    // 4xx
     BAD_REQUEST = 400,
+    UNAUTHORIZED = 401,
+    FORBIDDEN = 403,
+    NOT_FOUND = 404,
+    CONFLICT = 409,
+    PRECONDITION_FAILED = 412,
+    UNPROCESSABLE_ENTITY = 422,
+
+    // 5xx
+    INTERNAL = 500,
+    BAD_GATEWAY = 502,
+    SERVICE_UNAVAILABLE = 503,
+    GATEWAY_TIMEOUT = 504,
 }

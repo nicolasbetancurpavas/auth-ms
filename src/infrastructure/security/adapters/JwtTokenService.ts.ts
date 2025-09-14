@@ -1,13 +1,14 @@
 import jwt, { Secret, SignOptions } from 'jsonwebtoken';
-import { ENV } from '@modules/shared';
 import { TokenService } from '@modules/Auth/domain/services/AuthDomainServices';
-
+import { injectable } from 'inversify';
+import { ENV } from '@modules/shared';
+@injectable()
 export default class JwtTokenService implements TokenService {
     sign(payload: object, opts?: { expiresIn?: string | number }): string {
         const secret: Secret = ENV.JWT_SECRET as Secret;
         const expiresIn: SignOptions['expiresIn'] = (opts?.expiresIn ??
-            ENV.ACCESS_TOKEN_TTL) as SignOptions['expiresIn'];
-
+            ENV.ACCESS_TOKEN_TTL ??
+            '15m') as SignOptions['expiresIn'];
         return jwt.sign(payload, secret, { expiresIn });
     }
 

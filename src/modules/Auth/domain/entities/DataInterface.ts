@@ -1,7 +1,7 @@
 export type UserRole = 'user' | 'admin';
 export type UserVM = {
     id: number;
-    nombre: string;
+    name: string;
     email: string;
     rol: UserRole;
 };

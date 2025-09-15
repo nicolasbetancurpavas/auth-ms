@@ -6,15 +6,16 @@ const repeated = /(.)\1{2,}/;
 const commons = new Set(['password', '123456', 'qwerty', 'admin', 'welcome', 'abc123', '111111']);
 
 export const registerParamsSchema = Joi.object<IRegisterUser>({
-    name: Joi.string().min(2).max(100).required().messages({
-        'string.base': 'El campo name debe ser texto',
-        'string.empty': 'El campo name no puede estar vacio',
-        'any.required': 'El campo name es obligatorio',
+    name: Joi.string().min(5).max(100).required().messages({
+        'string.base': 'El campo nombre debe ser texto',
+        'string.empty': 'El campo nombre no puede estar vacio',
+        'any.required': 'El campo nombre es obligatorio',
     }),
 
     email: Joi.string().email().required().messages({
         'string.email': 'Debe ser un email válido',
         'any.required': 'El campo email es obligatorio',
+        'string.empty': 'El campo email no puede estar vacio',
     }),
 
     password: Joi.string()
@@ -40,15 +41,16 @@ export const registerParamsSchema = Joi.object<IRegisterUser>({
         })
         .required()
         .messages({
-            'string.min': 'La password debe tener mínimo 10 caracteres',
-            'string.max': 'La password no debe superar 72 caracteres (límite de bcrypt)',
-            'string.pattern.name': 'La password debe incluir al menos una {#name}',
-            'string.pattern.base': 'La password no cumple el formato requerido',
-            'password.common': 'La password es demasiado común',
+            'string.min': 'La contraseña debe tener mínimo 10 caracteres',
+            'string.max': 'La contraseña no debe superar 72 caracteres (límite de bcrypt)',
+            'string.pattern.name': 'La contraseña debe incluir al menos una {#name}',
+            'string.pattern.base': 'La contraseña no cumple el formato requerido',
+            'password.common': 'La contraseña es demasiado común',
             'password.seq': 'Evita secuencias como 1234 o abcd',
             'password.repeat': 'Evita repetir caracteres (aaa, 111, ...)',
             'password.personal': 'No uses tu nombre o tu usuario de email en la contraseña',
-            'any.required': 'El campo password es obligatorio',
+            'any.required': 'El campo contraseña es obligatorio',
+            'string.empty': 'El campo contraseña no puede estar vacio',
         }),
 
     rol: Joi.string().valid('user', 'admin').default('user').messages({

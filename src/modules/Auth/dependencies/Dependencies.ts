@@ -11,7 +11,7 @@ import UserDAO from '@infrastructure/bd/postgresql/dao/authDAO';
 import { PasswordHasher, TokenService } from '../domain/services/AuthDomainServices';
 import BcryptPasswordHasher from '@infrastructure/security/adapters/BcryptPasswordHasher';
 import RegisterUserUseCase from '../usecase/RegisterUserUseCase';
-import JwtTokenService from '@infrastructure/security/adapters/JwtTokenService.ts';
+import JwtTokenService from '@infrastructure/security/adapters/JwtTokenService';
 
 const createDependencies = (): void => {
     GLOBAL_CONTAINER.bind<IDatabase<IMain>>(TYPESDEPENDENCIES.Postgresql).toConstantValue(db);
@@ -25,7 +25,7 @@ const createDependencies = (): void => {
     );
     GLOBAL_CONTAINER.bind<TokenService>(TYPESDEPENDENCIES.TokenService).to(JwtTokenService).inSingletonScope();
     GLOBAL_CONTAINER.bind<PubSub>(TYPESDEPENDENCIES.PubSub).toConstantValue(pubsubV2);
-    GLOBAL_CONTAINER.bind<AuthRouter>(TYPESDEPENDENCIES.TenancyRouter).to(AuthRouter).inSingletonScope();
+    GLOBAL_CONTAINER.bind<AuthRouter>(TYPESDEPENDENCIES.AuthRouter).to(AuthRouter).inSingletonScope();
 };
 
 export default createDependencies;

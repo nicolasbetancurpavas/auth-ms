@@ -2,7 +2,7 @@ import { IModule } from '@common/modules/IModule';
 import { HTTPMETODO, Ruta } from '@common/modules/Ruta';
 import createDependencies from './dependencies/Dependencies';
 import createDependencyContainer from '@common/dependencies/DependencyContainer';
-import TenancyRouter from './controllers/AuthRouter';
+import AuthRouter from './controllers/AuthRouter';
 
 export default class Modules implements IModule {
     private moduloRuta = '/api/v1/';
@@ -17,17 +17,17 @@ export default class Modules implements IModule {
             {
                 metodo: HTTPMETODO.POST,
                 url: '/register',
-                evento: TenancyRouter.prototype.register,
+                evento: AuthRouter.prototype.register,
             },
             {
                 metodo: HTTPMETODO.POST,
                 url: '/login',
-                evento: TenancyRouter.prototype.login,
+                evento: AuthRouter.prototype.login,
             },
             {
                 metodo: HTTPMETODO.GET,
                 url: '/validate',
-                evento: TenancyRouter.prototype.validate,
+                evento: AuthRouter.prototype.validate,
             },
         ];
     };

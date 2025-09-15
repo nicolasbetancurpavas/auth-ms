@@ -5,6 +5,5 @@ const TYPES = {
     PubSubRepo: Symbol.for('PubSubRepo'),
     EventsPublisher: Symbol.for('PubSubEventsPublisher'),
     Publisher: Symbol.for('PubsubPublisher'),
-    ValidateTokenAPIService: Symbol.for('ValidateTokenAPIService'),
 };
 export default TYPES;

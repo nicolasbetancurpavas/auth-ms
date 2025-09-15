@@ -1,5 +1,3 @@
-const { resolve } = require('path');
-
 module.exports = {
     preset: 'ts-jest',
     testEnvironment: 'node',
@@ -31,17 +29,17 @@ module.exports = {
     coverageDirectory: './coverage/',
     collectCoverage: true,
     moduleNameMapper: {
-        '^@application/(.*)$': resolve(__dirname, './src/application/$1'),
-        '^@domain/(.*)$': resolve(__dirname, './src/domain/$1'),
-        '^@infrastructure/(.*)$': resolve(__dirname, './src/infrastructure/$1'),
-        '^@configuration/(.*)$': resolve(__dirname, './src/configuration/$1'),
-        '^@common/(.*)$': resolve(__dirname, './src/common/$1'),
-        '^@modules/(.*)$': resolve(__dirname, './src/modules/$1'),
-        '^@configuration': resolve(__dirname, './src/configuration/index'),
-        '^@util': resolve(__dirname, './src/util/index'),
-        '^@modules': resolve(__dirname, './src/modules/index'),
-        '^@common': resolve(__dirname, './src/common/index'),
+        '^@application/(.*)$': '<rootDir>/src/application/$1',
+        '^@domain/(.*)$': '<rootDir>/src/domain/$1',
+        '^@infrastructure/(.*)$': '<rootDir>/src/infrastructure/$1',
+        '^@configuration/(.*)$': '<rootDir>/src/configuration/$1',
+        '^@common/(.*)$': '<rootDir>/src/common/$1',
+        '^@modules/(.*)$': '<rootDir>/src/modules/$1',
+        '^@configuration$': '<rootDir>/src/configuration/index',
+        '^@util$': '<rootDir>/src/util/index',
+        '^@modules$': '<rootDir>/src/modules/index',
+        '^@common$': '<rootDir>/src/common/index',
+
     },
-    reporters: ['default', ['jest-junit', { outputDirectory: 'test-results', outputName: 'test-report.xml' }]],
     setupFiles: ['<rootDir>/jest.setup.ts'],
 };

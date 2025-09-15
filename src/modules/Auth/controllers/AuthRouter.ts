@@ -24,6 +24,7 @@ export default class AuthRouter {
         });
     }
     async login(req: Request<ILoginUser>) {
+        validateHeaders(registerHeadersSchema, req.headers);
         const data = validateData<ILoginUser>(loginParamsSchema, req.data);
         const useCase = GLOBAL_CONTAINER.get<LoginUserUseCase>(TYPESDEPENDENCIES.LoginUserUseCase);
         const out = await useCase.execute(data);
@@ -31,7 +32,6 @@ export default class AuthRouter {
         (res as any).headers = { 'Cache-Control': 'no-store, max-age=0' };
         return res;
     }
-
     async validate(req: Request<unknown>) {
         const headers = validateHeaders(authHeadersSchema, req.headers);
         const token = extractBearer(headers.authorization as string);

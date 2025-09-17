@@ -10,11 +10,11 @@ import { loginParamsSchema } from '../schemas/LoginShema';
 import RegisterUserUseCase from '../usecase/RegisterUserUseCase';
 import LoginUserUseCase from '../usecase/LoginUserUseCase';
 import { validateHeaders } from '../schemas/ShemaValidator';
-import { authHeadersSchema, extractBearer, registerHeadersSchema } from '../schemas/HeadersShema';
+import { authHeadersSchema, extractBearer } from '../schemas/HeadersShema';
 import { TokenService } from '../domain/services/AuthDomainServices';
 export default class AuthRouter {
     async register(req: Request<IRegisterUser>) {
-        validateHeaders(registerHeadersSchema, req.headers);
+        // validateHeaders(registerHeadersSchema, req.headers);
         const useCase = GLOBAL_CONTAINER.get<RegisterUserUseCase>(TYPESDEPENDENCIES.RegisterUserUseCase);
         const data = validateData<IRegisterUser>(registerParamsSchema, req.data);
         const result = await useCase.execute(data);
@@ -24,7 +24,7 @@ export default class AuthRouter {
         });
     }
     async login(req: Request<ILoginUser>) {
-        validateHeaders(registerHeadersSchema, req.headers);
+        // validateHeaders(registerHeadersSchema, req.headers);
         const data = validateData<ILoginUser>(loginParamsSchema, req.data);
         const useCase = GLOBAL_CONTAINER.get<LoginUserUseCase>(TYPESDEPENDENCIES.LoginUserUseCase);
         const out = await useCase.execute(data);

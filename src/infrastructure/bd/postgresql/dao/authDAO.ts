@@ -6,6 +6,7 @@ import { UserVM } from '@modules/Auth/domain/entities/DataInterface';
 import { CreateUserInput, UserRepository } from '@modules/Auth/domain/repositories/UserRepository';
 import { CREATE_USER, VALIDATE_EMAIL } from './querys/queryAuth';
 import { AuthErrorCode, AuthException } from '@common/http/exceptions';
+import CustomError from '@common/utils/CustomError';
 
 @injectable()
 export default class UserDAO implements UserRepository {
@@ -15,8 +16,12 @@ export default class UserDAO implements UserRepository {
     ) {}
 
     async findByEmail(email: string) {
-        const row = await this.db.oneOrNone<UserRow>(VALIDATE_EMAIL, [email]);
-        return row ? toUserAuth(row) : null;
+        try {
+            const row = await this.db.oneOrNone<UserRow>(VALIDATE_EMAIL, [email]);
+            return row ? toUserAuth(row) : null;
+        } catch (e) {
+            throw new CustomError(e);
+        }
     }
 
     async create(input: CreateUserInput): Promise<UserVM> {

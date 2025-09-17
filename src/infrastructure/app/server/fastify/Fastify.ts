@@ -5,7 +5,7 @@ import { randomBytes } from 'crypto';
 import { IModule } from '@common/modules/IModule';
 import { HTTPMETODO } from '@common/modules/Ruta';
 import { ENV } from '@modules/shared';
-import CustomError from '@common/utils/CustomError';
+import { AuthErrorDictionary, AuthException } from '@common/http/exceptions';
 
 export class FastifyServer {
     port: number = +ENV.PORT;
@@ -13,7 +13,7 @@ export class FastifyServer {
 
     constructor() {
         this.app = fastify({
-            logger: false,
+            logger: true,
             return503OnClosing: false,
             genReqId: () => randomBytes(20).toString('hex'),
         });
@@ -48,10 +48,11 @@ export class FastifyServer {
     }
 
     private setupErrorHandler() {
-        this.app.setErrorHandler((error: any, _req, reply) => {
+        this.app.setErrorHandler((error: any, req, reply): void => {
             const stripCode = (arr: any[]) => arr.map(({ code, ...rest }) => rest);
+            const reqId = (req as any)?.id;
 
-            // CustomError con toResponse()
+            // 1) Errores con toResponse()
             if (typeof error?.toResponse === 'function') {
                 const f = error.toResponse();
                 const status = Number(f.statusCode) || 500;
@@ -60,31 +61,83 @@ export class FastifyServer {
                     : Array.isArray((f as any).errors)
                     ? (f as any).errors
                     : undefined;
-                const det = Array.isArray(detSrc) ? stripCode(detSrc) : undefined;
-                reply.status(status).send({ statusCode: status, message: f.message ?? 'Error interno', details: det });
-                return;
+                const details = Array.isArray(detSrc) ? stripCode(detSrc) : undefined;
+
+                reply.code(status).send({
+                    statusCode: status,
+                    message: f.message ?? 'Error interno',
+                    details,
+                    reqId,
+                });
+                return; // <-- importante: no devolver FastifyReply, solo terminar
             }
 
-            // Validación Fastify/AJV (si aplica)
+            // 2) Validaciones AJV/Fastify
             if (error?.validation?.length) {
                 const details = error.validation.map((v: any) => ({
-                    field: v?.instancePath?.slice(1) || v?.params?.missingProperty || 'unknown',
+                    field: v?.instancePath?.slice(1) || v?.params?.missingProperty || v?.params?.key || 'unknown',
                     message: v?.message || 'Campo inválido',
                 }));
-                reply.status(422).send({ statusCode: 422, message: 'Datos inválidos.', details });
+
+                reply.code(422).send({
+                    statusCode: 422,
+                    message: 'Datos inválidos.',
+                    details,
+                    reqId,
+                });
                 return;
             }
 
-            // CustomError directo
-            if (error instanceof CustomError) {
-                const status = Number(error.statusCode) || 422;
-                const det = Array.isArray((error as any).details) ? stripCode((error as any).details) : undefined;
-                reply.status(status).send({ statusCode: status, message: error.message, details: det });
+            // 3) CustomError
+            if (error instanceof AuthException) {
+                const dict = AuthErrorDictionary[error.code] ?? {
+                    status: 500,
+                    message: 'Error interno',
+                };
+
+                reply.code(dict.status).send({
+                    statusCode: dict.status,
+                    message: dict.message,
+                    code: error.code,
+                    reqId,
+                });
                 return;
             }
 
-            // Fallback desconocido
-            reply.status(500).send({ statusCode: 500, message: 'Error interno' });
+            // 4) Errores de Postgres (pg/pg-promise)
+            const pgCode: string | undefined = error?.code;
+            if (pgCode) {
+                const PG_MAP: Record<string, { status: number; msg: string }> = {
+                    '23505': { status: 409, msg: 'Registro duplicado' },
+                    '23503': { status: 409, msg: 'Violación de llave foránea' },
+                    '23502': { status: 400, msg: 'Campo requerido no puede ser NULL' },
+                    '23514': { status: 422, msg: 'Violación de restricción CHECK' },
+                    '22P02': { status: 400, msg: 'Formato inválido en el valor' },
+                    '42703': { status: 500, msg: 'Columna no existe' },
+                    '42P01': { status: 500, msg: 'Tabla no existe' },
+                };
+                const mapped = PG_MAP[pgCode] ?? { status: 500, msg: 'Error en la base de datos' };
+
+                const body: any = {
+                    statusCode: mapped.status,
+                    message: mapped.msg,
+                    reqId,
+                };
+                if (error.detail) body.detail = error.detail;
+                if (error.table) body.table = error.table;
+                if (error.constraint) body.constraint = error.constraint;
+                if (process.env.NODE_ENV !== 'production') {
+                    body.code = pgCode;
+                    if (error.routine) body.routine = error.routine;
+                }
+
+                reply.code(mapped.status).send(body);
+                return;
+            }
+
+            // 5) Fallback
+            reply.code(500).send({ statusCode: 500, message: 'Error interno ${error}', reqId });
+            // sin return de FastifyReply
         });
     }
 
@@ -138,5 +191,6 @@ export class FastifyServer {
     start = async (): Promise<void> => {
         await this.app.listen({ port: this.port });
         console.log(`Application running on port ${this.port}`);
+        console.log(this.app.printRoutes());
     };
 }

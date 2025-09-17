@@ -1,20 +1,121 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+🔐 Auth-MS
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+Microservicio de autenticación y autorización desarrollado con Node.js + TypeScript siguiendo los principios de Arquitectura Hexagonal (Clean Architecture).
+Se encarga de la gestión de usuarios, login, generación y validación de tokens JWT, además de proteger la infraestructura mediante hashing de contraseñas con bcrypt.
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+🚀 Características
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+Registro y autenticación de usuarios (/register, /login).
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+Generación de tokens JWT con expiración configurable.
+
+Hashing de contraseñas con bcrypt.
+
+Arquitectura hexagonal (separación clara entre dominio, infraestructura y aplicación).
+
+Uso de Inversify para inyección de dependencias.
+
+PostgreSQL como base de datos (ejemplo con repositorios y DAOs).
+
+Validación de esquemas con Joi.
+
+Escalabilidad mediante módulos desacoplados.
+
+🏗️ Arquitectura
+
+La estructura del proyecto sigue la filosofía hexagonal:
+
+src
+ ├── infrastructure       # Adaptadores (bcrypt, JWT, DAOs, etc.)
+ │   └── security/adapters
+ ├── modules              # Casos de uso y lógica de negocio
+ │   └── Auth
+ │       ├── controllers  # Routers y endpoints
+ │       ├── domain       # Entidades y servicios de dominio
+ │       ├── services     # Implementaciones de servicios (ej. TokenService, PasswordHasher)
+ │       ├── interfaces   # DTOs y contratos de entrada/salida
+ │       └── schemas      # Validaciones Joi
+ ├── dependencies         # Contenedor de dependencias (Inversify)
+ └── test                 # Pruebas unitarias
+
+📦 Instalación
+# Clonar el repo
+git clone https://github.com/tu-org/auth-ms.git
+cd auth-ms
+
+# Instalar dependencias
+yarn install
+
+
+Configura las variables de entorno en un archivo .env:
+
+PORT=8081
+JWT_SECRET=supersecretkey
+ACCESS_TOKEN_TTL=15m
+DATABASE_URL=postgres://user:password@localhost:5432/authdb
+
+▶️ Ejecución
+# Desarrollo (hot reload con ts-node-dev o equivalente)
+yarn dev
+
+# Compilación
+yarn build
+
+# Producción
+yarn start
+
+🔑 Endpoints principales
+Registro
+POST /api/v1/register
+
+
+Body:
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "123456",
+  "rol": "user"
+}
+
+Login
+POST /api/v1/login
+
+
+Body:
+
+{
+  "email": "john@example.com",
+  "password": "123456"
+}
+
+
+Respuesta:
+
+{
+  "access_token": "eyJhbGciOiJIUzI1...",
+  "expires_in": "15m"
+}
+
+🧩 Dependencias clave
+
+bcrypt
+ – Hash de contraseñas.
+
+jsonwebtoken
+ – Tokens JWT.
+
+inversify
+ – Inyección de dependencias.
+
+pg-promise
+ – Acceso a PostgreSQL.
+
+joi
+ – Validación de esquemas.
+
+🧪 Tests
+yarn test
+
+
+Se incluyen pruebas unitarias con Jest y mocks de dependencias.

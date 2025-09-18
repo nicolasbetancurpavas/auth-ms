@@ -103,15 +103,15 @@ Validar token
 GET /api/v1/validate
 
 
-Headers:
-
-Authorization: Bearer <token>
 
 ⚠️ Manejo de errores
 
 El servidor centraliza el manejo de errores con Fastify, devolviendo respuestas claras para el frontend.
 
 Ejemplos
+
+<img width="1023" height="791" alt="image" src="https://github.com/user-attachments/assets/4ebf3e22-3ead-44ed-aa9a-539acbf2b34e" />
+
 
 Email duplicado:
 

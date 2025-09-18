@@ -6,7 +6,7 @@ Permite **registro, login y validación** de usuarios mediante **JWT** y almacen
 Incluye un robusto sistema de **manejo de errores**, de forma que el frontend pueda mostrar mensajes claros y manejar formularios con validaciones precisas.
 
 > Base path: `http://localhost:${PORT}/${DOMAIN}/${SERVICE_NAME}/api/v1`  
-> Ejemplo local por defecto: `http://localhost:8081/tracking/auth-ms/api/v1`
+> Ejemplo local por defecto: `http://localhost:8081/tracking/auth-ms/api/v1` (usar esta que es la que consume el front)
 
 ---
 

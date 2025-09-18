@@ -66,7 +66,7 @@ direcciones
 
 Datos de envío y destino.
 
-🔑 Endpoints
+## 🔑 Endpoints
 Registro
 POST /api/v1/register
 
@@ -107,7 +107,7 @@ Headers:
 
 Authorization: Bearer <token>
 
-⚠️ Manejo de errores
+## ⚠️ Manejo de errores
 
 El servidor centraliza el manejo de errores con Fastify, devolviendo respuestas claras para el frontend.
 
@@ -145,8 +145,8 @@ Errores de PostgreSQL:
 }
 
 📦 Instalación
-# Clonar el repo
-git clone https://github.com/tu-org/auth-ms.git
+## Clonar el repo
+https://github.com/nicolasbetancurpavas/auth-ms.git
 cd auth-ms
 
 ## Instalar dependencias

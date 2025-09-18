@@ -221,6 +221,10 @@ ALLOWED_ORIGIN=http://localhost:3000
 yarn test
 ```
 
+<img width="974" height="588" alt="image" src="https://github.com/user-attachments/assets/a541c137-53bc-43f9-91e2-6085ec8fcf96" />
+
+
+
 Incluye pruebas unitarias con **Jest**, usando mocks para servicios externos (JWT, bcrypt, PostgreSQL).
 
 ---

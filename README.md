@@ -5,6 +5,9 @@ Permite **registro, login y validación** de usuarios mediante **JWT** y almacen
 
 Incluye un robusto sistema de **manejo de errores**, de forma que el frontend pueda mostrar mensajes claros y manejar formularios con validaciones precisas.
 
+> Base path: `http://localhost:${PORT}/${DOMAIN}/${SERVICE_NAME}/api/v1`  
+> Ejemplo local por defecto: `http://localhost:8081/tracking/auth-ms/api/v1`
+
 ---
 
 ### 🚀 Características principales
@@ -22,21 +25,33 @@ Incluye un robusto sistema de **manejo de errores**, de forma que el frontend pu
 
 ## 🏗️ Arquitectura Hexagonal
 
-La arquitectura separa claramente las responsabilidades en capas:
+La arquitectura separa claramente las responsabilidades en capas. **Estructura real del proyecto:**
 
 ```
 src
- ├── infrastructure       # Adaptadores (bcrypt, JWT, DAOs, etc.)
- │   └── security/adapters
- ├── modules              # Casos de uso y lógica de negocio
- │   └── Auth
- │       ├── controllers  # Routers y endpoints
- │       ├── domain       # Entidades y servicios de dominio
- │       ├── services     # Implementaciones de servicios (TokenService, PasswordHasher)
- │       ├── interfaces   # DTOs y contratos de entrada/salida
- │       └── schemas      # Validaciones Joi
- ├── dependencies         # Contenedor de dependencias (Inversify)
- └── test                 # Pruebas unitarias
+ ├── shared/
+ │   └── config/                          # ENV, constantes compartidas
+ ├── infrastructure/
+ │   ├── security/
+ │   │   └── adapters/                    # BcryptPasswordHasher, JwtTokenService
+ │   └── database/
+ │       └── dao/                         # UserDAO (pg-promise), querys
+ ├── modules/
+ │   ├── utils/
+ │   │   └── index.ts
+ │   └── Auth/
+ │       ├── controllers/                 # AuthRouter
+ │       ├── dependencies/                # TypesDependencies, Dependencies.ts
+ │       ├── domain/
+ │       │   ├── entities/                # DataInterface, modelos de dominio
+ │       │   ├── repositories/            # Contratos (UserRepository, etc.)
+ │       │   └── services/                # AuthDomainServices (PasswordHasher, TokenService)
+ │       ├── interfaces/                  # IRegisterUser, ILoginUser
+ │       ├── schemas/                     # Validaciones (Joi/AJV)
+ │       ├── usecase/                     # RegisterUserUseCase, LoginUserUseCase, ValidateTokenUseCase
+ │       └── test/                        # Pruebas unitarias
+ ├── AuthModules.ts
+ └── index.ts
 ```
 
 ---
@@ -64,11 +79,12 @@ El microservicio se conecta a una base PostgreSQL que maneja los siguientes esqu
 
 ## 🔑 Endpoints
 
+> Prefijo común: `/${DOMAIN}/${SERVICE_NAME}/api/v1`
+
 ### Registro
 ```
 POST /api/v1/register
 ```
-
 **Body**:
 ```json
 {
@@ -83,7 +99,6 @@ POST /api/v1/register
 ```
 POST /api/v1/login
 ```
-
 **Body**:
 ```json
 {
@@ -91,7 +106,6 @@ POST /api/v1/login
   "password": "123456"
 }
 ```
-
 **Respuesta**:
 ```json
 {
@@ -192,6 +206,8 @@ Ejemplo:
 
 ```env
 PORT=8081
+DOMAIN=tracking
+SERVICE_NAME=auth-ms
 JWT_SECRET=supersecretkey
 ACCESS_TOKEN_TTL=15m
 DATABASE_URL=postgres://user:password@localhost:5432/authdb
@@ -204,8 +220,6 @@ ALLOWED_ORIGIN=http://localhost:3000
 ```bash
 yarn test
 ```
-
-<img width="1141" height="656" alt="image" src="https://github.com/user-attachments/assets/f415a095-bf3d-4dc7-920d-8f956e615a35" />
 
 Incluye pruebas unitarias con **Jest**, usando mocks para servicios externos (JWT, bcrypt, PostgreSQL).
 

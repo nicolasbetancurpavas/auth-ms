@@ -1,11 +1,11 @@
-🔐 Auth-MS
+## 🔐 Auth-MS
 
 Microservicio de autenticación desarrollado con Node.js + TypeScript bajo principios de Arquitectura Hexagonal (Clean Architecture).
 Permite registro, login y validación de usuarios mediante JWT y almacenamiento seguro de contraseñas con bcrypt.
 
 Incluye un robusto sistema de manejo de errores, de forma que el frontend pueda mostrar mensajes claros y manejar formularios con validaciones precisas.
 
-🚀 Características principales
+### 🚀 Características principales
 
 Registro de usuarios con validación de email único.
 
@@ -23,7 +23,7 @@ PostgreSQL como base de datos para persistencia de usuarios.
 
 Manejo de errores avanzado con códigos de PostgreSQL y validaciones.
 
-🏗️ Arquitectura Hexagonal
+## 🏗️ Arquitectura Hexagonal
 
 La arquitectura separa claramente las responsabilidades en capas:
 
@@ -149,17 +149,17 @@ Errores de PostgreSQL:
 git clone https://github.com/tu-org/auth-ms.git
 cd auth-ms
 
-# Instalar dependencias
+## Instalar dependencias
 yarn install
 
 ▶️ Ejecución
-# Desarrollo (con hot reload)
+## Desarrollo (con hot reload)
 yarn dev
 
-# Compilar
+## Compilar
 yarn build
 
-# Producción
+## Producción
 yarn start
 
 ⚙️ Variables de entorno

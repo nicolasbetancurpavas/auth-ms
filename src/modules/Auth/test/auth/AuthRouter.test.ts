@@ -6,7 +6,7 @@ import TYPESDEPENDENCIES from '@modules/Auth/dependencies/TypesDependencies';
 import AuthRouter from '@modules/Auth/controllers/AuthRouter';
 import { validateHeaders } from '@modules/Auth/schemas/ShemaValidator';
 import { registerParamsSchema } from '@modules/Auth/schemas/RegisterSchema';
-import { authHeadersSchema, extractBearer, registerHeadersSchema } from '@modules/Auth/schemas/HeadersShema';
+import { authHeadersSchema, extractBearer } from '@modules/Auth/schemas/HeadersShema';
 import { loginParamsSchema } from '@modules/Auth/schemas/LoginShema';
 
 // ---- Mocks ----
@@ -51,7 +51,7 @@ describe('AuthRouter', () => {
     });
 
     describe('register', () => {
-        it('valida headers y body, ejecuta UC y retorna 201 con mensaje + data', async () => {
+        it('ejecuta UC y retorna 201 con mensaje + data', async () => {
             const router = new AuthRouter();
 
             const req = {
@@ -59,7 +59,7 @@ describe('AuthRouter', () => {
                 data: { name: 'Nico', email: 'user@test.com', password: 'Abc#123456' },
             } as any;
 
-            const validatedDto = { ...req.data }; // simulamos DTO sin cambios
+            const validatedDto = { ...req.data };
             const createdUser = {
                 id: 'u1',
                 name: 'Nico',
@@ -68,24 +68,22 @@ describe('AuthRouter', () => {
                 createdAt: '2025-01-01T00:00:00.000Z',
             };
 
-            (validateHeaders as jest.Mock).mockReturnValue(req.headers);
             (validateData as jest.Mock).mockImplementation((schema, data) => {
-                // Aserciones internas: que pase el schema correcto
                 expect(schema).toBe(registerParamsSchema);
                 expect(data).toBe(req.data);
                 return validatedDto;
             });
+
             (mockRegisterUC.execute as jest.Mock).mockResolvedValue(createdUser);
 
             const result = await router.register(req);
 
-            // Validaciones de llamadas
-            expect(validateHeaders).toHaveBeenCalledWith(registerHeadersSchema, req.headers);
+            // Ya no validamos validateHeaders
+
             expect(GLOBAL_CONTAINER.get).toHaveBeenCalledWith(TYPESDEPENDENCIES.RegisterUserUseCase);
             expect(mockRegisterUC.execute).toHaveBeenCalledWith(validatedDto);
 
-            // Forma del Result
-            expect(result.status).toBe(201); // Result.created
+            expect(result.status).toBe(201);
             expect(result.response).toEqual({
                 message: 'Usuario creado con éxito',
                 data: createdUser,
@@ -108,7 +106,7 @@ describe('AuthRouter', () => {
                 user: { id: 'u1', email: 'user@test.com', name: 'Nico', rol: 'user' },
             };
 
-            (validateHeaders as jest.Mock).mockReturnValue(req.headers);
+            // (validateHeaders as jest.Mock).mockReturnValue(req.headers);
             (validateData as jest.Mock).mockImplementation((schema, data) => {
                 // se usa loginParamsSchema
                 expect(schema).toBe(loginParamsSchema);
@@ -119,7 +117,7 @@ describe('AuthRouter', () => {
 
             const result = await router.login(req);
 
-            expect(validateHeaders).toHaveBeenCalledWith(registerHeadersSchema, req.headers); // así está en tu código
+            // expect(validateHeaders).toHaveBeenCalledWith(registerHeadersSchema, req.headers); // así está en tu código
             expect(GLOBAL_CONTAINER.get).toHaveBeenCalledWith(TYPESDEPENDENCIES.LoginUserUseCase);
             expect(mockLoginUC.execute).toHaveBeenCalledWith(validatedDto);
 

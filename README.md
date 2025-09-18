@@ -5,7 +5,7 @@ Permite registro, login y validación de usuarios mediante JWT y almacenamiento 
 
 Incluye un robusto sistema de manejo de errores, de forma que el frontend pueda mostrar mensajes claros y manejar formularios con validaciones precisas.
 
-### 🚀 Características principales
+### Características principales
 
 Registro de usuarios con validación de email único.
 
@@ -23,7 +23,7 @@ PostgreSQL como base de datos para persistencia de usuarios.
 
 Manejo de errores avanzado con códigos de PostgreSQL y validaciones.
 
-## 🏗️ Arquitectura Hexagonal
+##  Arquitectura Hexagonal
 
 La arquitectura separa claramente las responsabilidades en capas:
 
@@ -66,7 +66,7 @@ direcciones
 
 Datos de envío y destino.
 
-## 🔑 Endpoints
+## Endpoints
 Registro
 POST /api/v1/register
 
@@ -107,7 +107,7 @@ Headers:
 
 Authorization: Bearer <token>
 
-## ⚠️ Manejo de errores
+#### ⚠️ Manejo de errores
 
 El servidor centraliza el manejo de errores con Fastify, devolviendo respuestas claras para el frontend.
 

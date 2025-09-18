@@ -28,23 +28,25 @@ Manejo de errores avanzado con códigos de PostgreSQL y validaciones.
 La arquitectura separa claramente las responsabilidades en capas:
 
 src
- ├── infrastructure         # Adaptadores (bcrypt, JWT, DAOs de PostgreSQL, etc.)
- │   └── security/adapters
- ├── modules
- │   └── Auth
- │       ├── controllers    # Routers con endpoints HTTP
- │       ├── domain         # Entidades, servicios de dominio, contratos
- │       ├── services       # Implementaciones de servicios de dominio
- │       ├── interfaces     # DTOs y contratos de entrada/salida
- │       └── schemas        # Validaciones de entrada con Joi
- ├── dependencies           # Contenedor de dependencias (Inversify)
- └── server                 # Servidor Fastify + manejo de errores global
+├── infrastructure # Adaptadores (bcrypt, JWT, DAOs, etc.)
+│ └── security/adapters
+├── modules # Casos de uso y lógica de negocio
+│ └── Auth
+│ ├── controllers # Routers y endpoints
+│ ├── domain # Entidades y servicios de dominio
+│ ├── services # Implementaciones de servicios (TokenService, PasswordHasher)
+│ ├── interfaces # DTOs y contratos de entrada/salida
+│ └── schemas # Validaciones Joi
+├── dependencies # Contenedor de dependencias (Inversify)
+└── test # Pruebas unitarias
+
 
 📊 Modelo de Base de Datos
 
 El microservicio se conecta a una base PostgreSQL que maneja los siguientes esquemas relacionados:
 
-<!-- aquí enlazamos la imagen que me pasaste -->
+<img width="795" height="838" alt="image" src="https://github.com/user-attachments/assets/7017b477-27c3-4c82-b8fa-aff027f62e24" />
+
 
 Tablas principales
 
@@ -165,16 +167,9 @@ yarn start
 Las variables de entorno necesarias se encuentran adjuntas en el correo.
 Ejemplo:
 
-PORT=8081
-DOMAIN=tracking
-SERVICE_NAME=auth-ms
-JWT_SECRET=supersecretkey
-ACCESS_TOKEN_TTL=15m
-DATABASE_URL=postgres://user:password@localhost:5432/authdb
-ALLOWED_ORIGIN=http://localhost:3000
-
 🧪 Tests
 yarn test
+<img width="1141" height="656" alt="image" src="https://github.com/user-attachments/assets/f415a095-bf3d-4dc7-920d-8f956e615a35" />
 
 
 Incluye pruebas unitarias con Jest, usando mocks para servicios externos (JWT, bcrypt, PostgreSQL).
